@@ -53,8 +53,9 @@ jobs:
 
       - name: Publish report to GitHub Pages
         if: github.ref == 'refs/heads/main'
-        uses: playwright-community/playwright-report@v1
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          name: playwright-report
-          accessToken: ${{ secrets.GITHUB_TOKEN }}
-          reportPath: playwright-report
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: playwright-report
+          keep_files: false
+          force_orphan: true
