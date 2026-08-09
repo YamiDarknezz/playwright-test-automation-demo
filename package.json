@@ -1,0 +1,25 @@
+{
+  "name": "playwright-test-automation-demo",
+  "version": "1.0.0",
+  "description": "Playwright + TypeScript test framework covering API, integration and functional E2E tests, wired into GitHub Actions.",
+  "scripts": {
+    "test": "playwright test",
+    "test:api": "playwright test tests/api",
+    "test:ui": "playwright test tests/ui",
+    "test:headed": "playwright test --headed",
+    "show-report": "playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "test-automation",
+    "e2e",
+    "api-testing"
+  ],
+  "author": "YamiDarknezz",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
+  }
+}
