@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/YamiDarknezz/playwright-test-automation-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/YamiDarknezz/playwright-test-automation-demo/actions/workflows/ci.yml)
 
+**Live HTML report** (updated on every push to main): https://yamidarknezz.github.io/playwright-test-automation-demo/
+
 A **TypeScript + Playwright** test framework demonstrating API, integration and functional E2E tests, wired into CI/CD with GitHub Actions and HTML reporting.
 
 **System under test**: the [inventory-api](https://github.com/YamiDarknezz/inventory-api) — a Spring Boot REST API with JWT auth and role-based access control that I also wrote. Tests run against a real running instance, started automatically by Playwright's `webServer`.
