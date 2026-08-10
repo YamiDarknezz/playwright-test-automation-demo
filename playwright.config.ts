@@ -27,7 +27,12 @@ export default defineConfig({
   },
   projects: [
     { name: "api", testMatch: /tests\/api\// },
-    { name: "ui-chromium", use: { ...devices["Desktop Chrome"] }, testMatch: /tests\/ui\// },
+    { name: "ui-chromium", use: { ...devices["Desktop Chrome"] }, testMatch: /tests\/ui\/(?!mobile)/ },
+    {
+      name: "ui-mobile",
+      use: { ...devices["iPhone 13"] },
+      testMatch: /tests\/ui\/mobile\.spec\.ts/,
+    },
   ],
   webServer: {
     command: `java -jar ${API_JAR}`,

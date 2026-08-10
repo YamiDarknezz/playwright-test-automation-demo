@@ -37,7 +37,7 @@ export class TodoMvcPage {
   }
 
   todoItem(title: string): Locator {
-    return this.todoItems.filter({ hasText: title });
+    return this.todoItems.filter({ hasText: new RegExp(`^${title}$`) });
   }
 
   async completeTodo(title: string) {
