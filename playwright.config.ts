@@ -9,6 +9,9 @@ const API_JAR = process.env.INVENTORY_JAR ?? "../inventory-api/target/inventory-
 export default defineConfig({
   testDir: "./tests",
   testIgnore: "**/pages/**", // page objects are imported by specs, not run directly
+  // Platform-independent snapshot paths: baselines are generated on Linux (CI)
+  // so every OS compares against the same images.
+  snapshotPathTemplate: "{testDir}/ui/visual.spec.ts-snapshots/{arg}{ext}",
   timeout: 30_000,
   // The API is also exercised in CI from a cold JVM start, so retries
   // protect against slow first boots (flaky-test thinking).

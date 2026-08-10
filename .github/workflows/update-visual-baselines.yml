@@ -1,0 +1,55 @@
+name: Update Visual Baselines
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Regenerate snapshots on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/checkout@v4
+        with:
+          repository: YamiDarknezz/inventory-api
+          path: inventory-api
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Build inventory-api jar
+        working-directory: inventory-api
+        run: ./mvnw -q package -DskipTests
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Regenerate snapshots
+        env:
+          INVENTORY_JAR: inventory-api/target/inventory-api-0.1.0.jar
+        run: npx playwright test tests/ui/visual.spec.ts --update-snapshots
+
+      - name: Commit baselines
+        run: |
+          git config user.name "YamiDarknezz"
+          git config user.email "yami.darknezz@gmail.com"
+          git add tests/ui/visual.spec.ts-snapshots/
+          git commit -m "chore: regenerate visual baselines (Linux)" || echo "No changes"
+          git push
