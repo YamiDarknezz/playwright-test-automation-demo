@@ -6,6 +6,10 @@ const API_URL = process.env.API_URL ?? "http://localhost:8080";
 // INVENTORY_JAR when running in CI (where it is checked out inside the workspace).
 const API_JAR = process.env.INVENTORY_JAR ?? "../inventory-api/target/inventory-api-0.1.0.jar";
 
+// When targeting a remote API (e.g. production https://api-inventory.darknezz.dev)
+// there is no local jar to boot — skip the webServer entirely.
+const isRemote = API_URL.startsWith("http://localhost") === false;
+
 export default defineConfig({
   testDir: "./tests",
   testIgnore: "**/pages/**", // page objects are imported by specs, not run directly
@@ -37,10 +41,14 @@ export default defineConfig({
       testMatch: /tests\/ui\/mobile\.spec\.ts/,
     },
   ],
-  webServer: {
-    command: `java -jar ${API_JAR}`,
-    url: `${API_URL}/actuator/health`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
-  },
+  ...(isRemote
+    ? {}
+    : {
+        webServer: {
+          command: `java -jar ${API_JAR}`,
+          url: `${API_URL}/actuator/health`,
+          reuseExistingServer: !process.env.CI,
+          timeout: 60_000,
+        },
+      }),
 });

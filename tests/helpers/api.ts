@@ -46,11 +46,23 @@ export function authHeader(token: string) {
   return { Authorization: `Bearer ${token}` };
 }
 
-/** ADMIN + USER credentials seeded by the inventory-api dev profile. */
+/** ADMIN credentials: use env vars when targeting a remote API (e.g. production),
+ *  fall back to the inventory-api dev seeds locally. */
 export const seeded = {
-  admin: { username: "admin", password: "admin123" },
+  admin: {
+    username: process.env.ADMIN_USERNAME ?? "admin",
+    password: process.env.ADMIN_PASSWORD ?? "admin123",
+  },
   user: { username: "demo", password: "demo1234" },
 };
+
+export async function registerAndLogin(request: APIRequestContext): Promise<string> {
+  const user = randomUser();
+  const res = await request.post("/api/auth/register", { data: user });
+  expect(res.status(), "register should succeed").toBe(201);
+  const body = await res.json();
+  return body.token as string;
+}
 
 export async function createProduct(request: APIRequestContext, token: string, product: Product) {
   const res = await request.post("/api/products", {

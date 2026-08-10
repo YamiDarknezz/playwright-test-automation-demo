@@ -22,11 +22,11 @@ test.describe("Performance smoke", () => {
   });
 
   test("login responds under 2s after warm-up", async ({ request }) => {
-    // warm up (JVM cold start handled by webServer + retries)
-    await request.post("/api/auth/login", { data: seeded.user });
+    // warm up (JVM cold start handled by webServer + retries; admin creds via env for remote)
+    await request.post("/api/auth/login", { data: seeded.admin });
 
     const start = Date.now();
-    const res = await request.post("/api/auth/login", { data: seeded.user });
+    const res = await request.post("/api/auth/login", { data: seeded.admin });
     const elapsed = Date.now() - start;
 
     expect(res.status()).toBe(200);
